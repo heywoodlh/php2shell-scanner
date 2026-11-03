@@ -12,9 +12,9 @@ requires-python = ">=3.8"
 [project.scripts]
 php2shell-scanner = "run:main"
 
-# run.py is a single top-level module; naming it explicitly disables
-# setuptools' flat-layout auto-discovery (which would choke on the repo's
-# other top-level files). php2shell.yaml and paths.txt are data files the
-# flake installs next to the module.
+# run.py is one of several top-level modules (run, exploit, scan,
+# subdomains); naming them explicitly disables setuptools' flat-layout
+# auto-discovery (which would choke on the repo's other top-level files).
+# paths.txt is a data file the flake installs next to the modules.
 [tool.setuptools]
-py-modules = ["run"]
+py-modules = ["run", "exploit", "scan", "subdomains"]

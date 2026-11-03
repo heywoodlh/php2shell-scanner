@@ -31,21 +31,12 @@
 
             build-system = [ python3Packages.setuptools ];
 
-            # amass and nuclei are invoked at runtime; put them on PATH.
-            makeWrapperArgs = [
-              "--prefix"
-              "PATH"
-              ":"
-              (pkgs.lib.makeBinPath [
-                pkgs.amass
-                pkgs.nuclei
-              ])
-            ];
-
-            # run.py locates php2shell.yaml and paths.txt next to itself via
-            # __file__, so install them alongside the module in site-packages.
+            # run.py locates paths.txt next to itself via __file__, so install
+            # it alongside the modules in site-packages. Detection and
+            # enumeration are pure Python (scan.py / subdomains.py); no
+            # external tools are needed at runtime.
             postInstall = ''
-              cp php2shell.yaml paths.txt "$out/${python3Packages.python.sitePackages}/"
+              cp paths.txt "$out/${python3Packages.python.sitePackages}/"
             '';
 
             doCheck = false;

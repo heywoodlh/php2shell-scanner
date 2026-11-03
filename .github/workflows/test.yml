@@ -1,0 +1,33 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile all modules
+        run: python3 -m compileall -q run.py exploit.py scan.py subdomains.py
+      - name: Unit tests
+        run: python3 -m unittest tests.unit_test -v
+
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Pull the vulnerable lab image
+        run: docker pull php:8.4.26-apache
+      - name: Run integration tests against the live container
+        run: bash tests/integration.sh
